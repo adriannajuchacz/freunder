@@ -1,26 +1,38 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      users: ''
+    };
+  }
+
+  onChange = (event) => {
+    this.setState({ term: event.target.value });
+  }
+  handleSubmit = (event) => {
+    event.preventDefault();
+    const api_key = 'dc6zaTOxFJmzC';
+    const url = `http://api.giphy.com/v1/gifs/search?q=${this.state.term}&api_key=${api_key}`;
+    fetch(url)
+      .then(response => response.json())
+      .then(data => this.setState({ term:'', img: data.data[0].images.fixed_height.url }))
+      .catch(e => console.log('error', e));
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <form onSubmit={this.handleSubmit}>
+          <input value={this.state.term} onChange={this.onChange} />
+          <button>Search!</button>
+        </form>
+        <img src={this.state.img} height="200" alt={this.state.term} />
+      </div>
+    );
+  }
 }
 
 export default App;
