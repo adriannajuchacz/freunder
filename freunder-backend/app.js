@@ -1,17 +1,14 @@
 const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
 const mongoose = require('mongoose');
-const passport = require('passport');
 const flash = require('connect-flash');
 const session = require('express-session');
 const dotenv = require('dotenv');
+const bodyParser = require('body-parser');
 
 dotenv.config();
 
 const app = express();
-
-// Passport Config
-require('./config/passport')(passport);
 
 // DB Config
 const db = require('./config/keys').mongoURI;
@@ -29,8 +26,8 @@ mongoose
 app.use(expressLayouts);
 app.set('view engine', 'ejs');
 
-// Express body parser
-app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 // Express session
 app.use(
@@ -40,11 +37,6 @@ app.use(
     saveUninitialized: true
   })
 );
-
-// Passport middleware
-app.use(passport.initialize());
-app.use(passport.session());
-
 // Connect flash
 app.use(flash());
 
