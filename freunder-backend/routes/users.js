@@ -15,4 +15,26 @@ router.get('/', (req, res) => {
   });
 });
 
+// get User with id
+router.get('/:id', (req, res) => {
+  console.log('HAHAHAHAHAH')
+  console.log(req.params.id)
+  User
+    .findOne({ _id: req.params.id })
+    .then(user => {
+      if (!user) {
+        res.status(404).send({
+          success: 'false',
+          message: 'No user found',
+        })
+      } else {
+        res.status(200).send({
+        success: 'true',
+        message: 'User retrieved successfully',
+        user: user
+      })
+      }
+    });
+});
+
 module.exports = router;
