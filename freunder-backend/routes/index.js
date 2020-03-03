@@ -3,13 +3,12 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 // Load User model
 const User = require('../models/User');
+const jwt = require('jsonwebtoken');
 
 const { ensureAuthenticated, forwardAuthenticated } = require('../config/auth');
 
 // Welcome Page
 router.get('/', forwardAuthenticated, (req, res) => res.render('welcome'));
-
-
 
 // Login Page
 router.get('/login', forwardAuthenticated, (req, res) => res.render('login'));
@@ -96,12 +95,19 @@ router.post('/login', (req, res, next) => {
     bcrypt.compare(req.body.password, user.password, (err, isMatch) => {
       if (err) throw err;
       if (isMatch) {
-        res.status(200).send({
-          success: 'true',
-          message: 'Successfully logged in',
+        jwt.sign({
+          exp: Math.floor(Date.now() / 1000) + (60 * 60),
           user: user
-        })
-        return;
+        }, 'secretkey',
+        (err, token) => {
+          res.status(200).send({
+            success: 'true',
+            message: 'Successfully logged in',
+            user: user,
+            token: token
+          })
+          return;
+        });
       } else {
         res.status(401).send({
           success: 'false',
@@ -122,6 +128,5 @@ router.get('/logout', (req, res) => {
     user: user
   })
 });
-
 
 module.exports = router;

@@ -5,6 +5,7 @@ const flash = require('connect-flash');
 const session = require('express-session');
 const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
+const { verifyToken } = require('./config/auth');
 
 dotenv.config();
 
@@ -50,7 +51,7 @@ app.use(function(req, res, next) {
 
 // Routes
 app.use('/', require('./routes/index.js'));
-app.use('/users', require('./routes/users.js'));
+app.use('/users',verifyToken, require('./routes/users.js'));
 
 const PORT = process.env.PORT || 5000;
 
