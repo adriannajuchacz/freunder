@@ -15,26 +15,6 @@ router.get('/', (req, res) => {
   });
 });
 
-// delete User with id
-router.delete('/:id', (req, res) => {
-  User
-    .deleteOne({ _id: req.params.id })
-    .then(user => {
-      if (!user) {
-        res.status(404).send({
-          success: 'false',
-          message: 'No user found',
-        })
-      } else {
-        res.status(200).send({
-        success: 'true',
-        message: 'User deleted successfully',
-        user: user
-      })
-      }
-    });
-});
-
 // get User with id
 router.get('/:id', (req, res) => {
   User
@@ -49,6 +29,26 @@ router.get('/:id', (req, res) => {
         res.status(200).send({
         success: 'true',
         message: 'User retrieved successfully',
+        user: user
+      })
+      }
+    });
+});
+
+// delete User with id
+router.delete('/:id', (req, res) => {
+  User
+    .deleteOne({ _id: req.params.id })
+    .then(user => {
+      if (!user) {
+        res.status(404).send({
+          success: 'false',
+          message: 'No user found',
+        })
+      } else {
+        res.status(200).send({
+        success: 'true',
+        message: 'User deleted successfully',
         user: user
       })
       }

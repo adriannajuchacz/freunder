@@ -1,18 +1,6 @@
 const jwt = require('jsonwebtoken');
 
 module.exports = {
-  ensureAuthenticated: function(req, res, next) {
-    if (req.isAuthenticated()) {
-      return next();
-    }
-    req.flash('error_msg', 'Please log in to view that resource');
-    res.redirect('/users/login');
-  },
-  forwardAuthenticated: function(req, res, next) {
-    if (!req.isAuthenticated()) {
-      return next();
-    }   
-  },
   verifyToken: function(req, res, next) {
     // Get auth header value
     const bearerHeader = req.headers['authorization'];

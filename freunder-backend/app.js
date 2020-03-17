@@ -52,6 +52,7 @@ app.use(function(req, res, next) {
 // Routes
 app.use('/', require('./routes/index.js'));
 app.use('/users',verifyToken, require('./routes/users.js'));
+app.use('/events',verifyToken, require('./routes/events.js'));
 
 const PORT = process.env.PORT || 5000;
 

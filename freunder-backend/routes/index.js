@@ -5,17 +5,6 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 
-const { ensureAuthenticated, forwardAuthenticated } = require('../config/auth');
-
-// Welcome Page
-router.get('/', forwardAuthenticated, (req, res) => res.render('welcome'));
-
-// Login Page
-router.get('/login', forwardAuthenticated, (req, res) => res.render('login'));
-
-// Register Page
-router.get('/register', forwardAuthenticated, (req, res) => res.render('register'));
-
 // Register
 router.post('/register', (req, res) => {
   const { name, email, password, password2 } = req.body;
@@ -60,6 +49,8 @@ router.post('/register', (req, res) => {
           bcrypt.hash(newUser.password, salt, (err, hash) => {
             if (err) throw err;
             newUser.password = hash;
+            newUser.createdEvents = []
+            newUser.attendedEvents = []
             newUser
               .save()
               .then(user => {
