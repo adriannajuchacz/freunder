@@ -3,6 +3,38 @@ const router = express.Router();
 const User = require("../models/User");
 const Event = require("../models/Event");
 
+// Gets All Events
+router.get("/", (req, res) => {
+  Event.find({}).then(events => {
+    res.status(200).send({
+      success: "true",
+      message: "events retrieved successfully",
+      events: events
+    });
+  });
+});
+
+// get event with id
+router.get('/:id', (req, res) => {
+  Event
+    .findOne({ _id: req.params.id })
+    .then(event => {
+      if (!event) {
+        res.status(404).send({
+          success: 'false',
+          message: 'No event found',
+        })
+      } else {
+        res.status(200).send({
+        success: 'true',
+        message: 'Event retrieved successfully',
+        event: event
+      })
+      }
+    });
+});
+
+// CREATE EVENT
 router.post("/", (req, res) => {
   let { name, link, location, date, user_id } = req.body;
   let errors = [];
