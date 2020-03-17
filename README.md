@@ -1,5 +1,5 @@
 # freunder
-Backend start: npm start
+Backend start: npm run dev
 
 Entry points:
 
