@@ -17,4 +17,4 @@ GET http://localhost:7878/users/:id
 DELETE http://localhost:7878/users/:id
 
 
-POST http://localhost:7878/users/:id/events (creates an user's event)
+POST http://localhost:7878/events (creates an user's event)
