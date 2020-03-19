@@ -1,6 +1,9 @@
 import React, { Component } from "react";
+import { Provider } from "react-redux";
+import Login from "./components/Login";
 import EventList from "./components/EventList";
 import "./App.css";
+import store from "./store";
 
 class App extends Component {
   state = {
@@ -18,9 +21,12 @@ class App extends Component {
   };
   render() {
     return (
-      <div className="App">
-        <EventList events={this.state.events}/>
-      </div>
+      <Provider store={store}>
+        <div className="App">
+          <Login/>
+          <EventList events={this.state.events}/>
+        </div>
+      </Provider>
     );
   }
 }
