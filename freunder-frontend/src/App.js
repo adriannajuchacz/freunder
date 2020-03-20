@@ -5,6 +5,7 @@ import EventList from "./components/EventList";
 import "./App.css";
 import store from "./store";
 
+
 class App extends Component {
   state = {
     events: [
@@ -23,12 +24,13 @@ class App extends Component {
     return (
       <Provider store={store}>
         <div className="App">
-          <Login/>
-          <EventList events={this.state.events}/>
+          <Login />
+          <EventList events={this.props.events} />
         </div>
       </Provider>
     );
   }
 }
+
 
 export default App;

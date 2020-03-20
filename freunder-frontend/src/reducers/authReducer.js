@@ -18,7 +18,6 @@ const authReducer = (state = initialState, action) => {
         isLoading: false
       };
     default:
-      console.log('in authReducer')
       return state;
   }
 };
