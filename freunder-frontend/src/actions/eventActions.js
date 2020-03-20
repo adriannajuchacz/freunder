@@ -1,6 +1,6 @@
-import axios from "axios";
 import { GET_EVENTS } from "./types";
 import store from "../store";
+import { axiosInstance } from '../axiosInstance';
 
 // Login User
 export const getEvents = () => dispatch => {
@@ -11,8 +11,8 @@ export const getEvents = () => dispatch => {
       Authorization: "Bearer " + token
     }
   };
-  axios
-    .get("https://freunder.uber.space/events", config)
+  axiosInstance
+    .get("events")
     .then(res => {
       store.dispatch({
         type: GET_EVENTS,

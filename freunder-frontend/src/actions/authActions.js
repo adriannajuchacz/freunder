@@ -1,4 +1,4 @@
-import axios from "axios";
+import { axiosInstance } from '../axiosInstance';
 import { LOGIN_SUCCESS, LOGIN_FAIL } from "../actions/types";
 import store from "../store";
 
@@ -15,8 +15,8 @@ export const login = () => dispatch => {
   //TODO
   //const body = JSON.stringify({ email, password });
   const body = { email: "jan@gmail.com", password: "password" };
-  axios
-    .post("https://freunder.uber.space/login", body, config)
+  axiosInstance
+    .post("/login", body, config)
     .then(res =>{
       store.dispatch({
         type: LOGIN_SUCCESS,
