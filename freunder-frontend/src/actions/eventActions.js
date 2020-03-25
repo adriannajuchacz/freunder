@@ -5,12 +5,6 @@ import { axiosInstance } from '../axiosInstance';
 // Login User
 export const getEvents = () => dispatch => {
   // Headers
-  const token = localStorage.getItem("token");
-  const config = {
-    headers: {
-      Authorization: "Bearer " + token
-    }
-  };
   axiosInstance
     .get("events")
     .then(res => {

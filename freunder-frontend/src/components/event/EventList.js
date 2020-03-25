@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Event from "./Event";
-import { getEvents } from "../actions/eventActions";
+import { getEvents } from "../../actions/eventActions";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
@@ -13,6 +13,7 @@ class EventList extends Component {
     const propEvents = events.map(event => <Event event={event} />);
     return (
       <div>
+        <h1>EVENTLIST.JS</h1>
         {propEvents}
       </div>
     );

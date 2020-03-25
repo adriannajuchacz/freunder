@@ -2,7 +2,7 @@ import { LOGIN_SUCCESS } from "../actions/types";
 
 const initialState = {
   token: localStorage.getItem("token"),
-  isAuthenticated: null,
+  isAuthenticated: localStorage.getItem("token") != null,
   isLoading: false,
   user: null
 };
