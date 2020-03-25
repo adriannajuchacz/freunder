@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Button from "@material-ui/core/Button";
 import EventList from "./event/EventList";
-import Calendar from "./event/Calendar";
+import Calendar from "./event/EventCalendar";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 
 export class Main extends Component {

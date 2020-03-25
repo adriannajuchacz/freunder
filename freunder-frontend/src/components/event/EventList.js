@@ -23,12 +23,10 @@ class EventList extends Component {
     ));
     return (
       <div>
-        <h1>EVENTLIST.JS</h1>
-
         <Grid container direction="column" justify="center" spacing={3}>
-          <Grid item xs={12}>
+          <Grid item container xs={12}>
             <Grid container justify="center">
-              <Grid item md={8} xs={10}>
+              <Grid md={8} xs={10}>
                 <Button fullWidth size="large" variant="outlined" color="primary">
                   + add new Event
                 </Button>
