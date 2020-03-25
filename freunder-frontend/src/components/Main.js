@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Button from "@material-ui/core/Button";
 import EventList from "./event/EventList";
 import Calendar from "./event/Calendar";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
 
 export class Main extends Component {
   constructor(props) {
@@ -25,13 +26,10 @@ export class Main extends Component {
   render() {
     return (
       <div>
-        <h1>MAIN.JS</h1>
-        <Button variant="contained" onClick={this.setEvents}>
-          Events
-        </Button>
-        <Button variant="contained" onClick={this.setCalendar}>
-          Calendar
-        </Button>
+        <ButtonGroup color="primary" aria-label="outlined primary button group">
+          <Button onClick={this.setEvents}>Events</Button>
+          <Button onClick={this.setCalendar}>Calendar</Button>
+        </ButtonGroup>
         {this.state.isEventsOn ? <EventList /> : <Calendar />}
       </div>
     );
