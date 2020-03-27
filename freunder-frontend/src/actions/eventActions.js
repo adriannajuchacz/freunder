@@ -1,10 +1,9 @@
 import { GET_EVENTS } from "./types";
 import store from "../store";
-import { axiosInstance } from '../axiosInstance';
+import { axiosInstance } from "../axiosInstance";
+import { returnErrors } from "./errorActions";
 
-// Login User
 export const getEvents = () => dispatch => {
-  // Headers
   axiosInstance
     .get("events")
     .then(res => {
@@ -13,13 +12,7 @@ export const getEvents = () => dispatch => {
         payload: res.data
       });
     })
-    .catch(
-      err => {}
-      /* ispatch(
-        returnErrors(err.response.data, err.response.status, "LOGIN_FAIL")
-      );  
-      store.dispatch({
-        type: LOGIN_FAIL
-      })*/
+    .catch(err =>
+      dispatch(returnErrors(err.response.data, err.response.status))
     );
 };

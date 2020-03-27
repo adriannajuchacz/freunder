@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
+import { Link } from "react-router-dom";
 
 class EventList extends Component {
   componentDidMount() {
@@ -27,9 +28,16 @@ class EventList extends Component {
           <Grid item container xs={12}>
             <Grid container justify="center">
               <Grid md={8} xs={10}>
-                <Button fullWidth size="large" variant="outlined" color="primary">
-                  + add new Event
-                </Button>
+                <Link to="/newEvent">
+                  <Button
+                    fullWidth
+                    size="large"
+                    variant="outlined"
+                    color="primary"
+                  >
+                    + add new Event
+                  </Button>
+                </Link>
               </Grid>
             </Grid>
           </Grid>
