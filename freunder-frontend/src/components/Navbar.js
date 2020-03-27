@@ -5,12 +5,11 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import AccountCircle from "@material-ui/icons/AccountCircle";
-import Switch from "@material-ui/core/Switch";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormGroup from "@material-ui/core/FormGroup";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import Button from "@material-ui/core/Button";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -21,18 +20,18 @@ const useStyles = makeStyles(theme => ({
   },
   title: {
     flexGrow: 1
+  },
+  whiteBtn: {
+    color: "#fff !important",
+    borderColor: "#fff !important"
   }
 }));
 
-export default function MenuAppBar() {
+function MenuAppBar({isAuthenticated}) {
   const classes = useStyles();
-  const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
-  const handleChange = event => {
-    setAuth(event.target.checked);
-  };
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -44,24 +43,12 @@ export default function MenuAppBar() {
 
   return (
     <div className={classes.root}>
-      <FormGroup>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={auth}
-              onChange={handleChange}
-              aria-label="login switch"
-            />
-          }
-          label={auth ? "Logout" : "Login"}
-        />
-      </FormGroup>
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
             FREUNDER
           </Typography>
-          {auth ? (
+          {isAuthenticated ? (
             <div>
               <IconButton
                 aria-label="account of current user"
@@ -93,16 +80,19 @@ export default function MenuAppBar() {
               </Menu>
             </div>
           ) : (
-            <Button
-              variant="outlined"
-              size="large"
-              margin="normal"
-            >
-              Log in
-            </Button>
+            <Link to="/login">
+              <Button variant="outlined" className={classes.whiteBtn}>
+                Log in
+              </Button>
+            </Link>
           )}
         </Toolbar>
       </AppBar>
     </div>
   );
 }
+
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+});
+export default connect(mapStateToProps)(MenuAppBar);
