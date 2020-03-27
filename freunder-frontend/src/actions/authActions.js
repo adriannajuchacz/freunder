@@ -1,5 +1,5 @@
 import { axiosInstance } from '../axiosInstance';
-import { LOGIN_SUCCESS, LOGIN_FAIL } from "../actions/types";
+import { LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT_SUCCESS } from "../actions/types";
 import store from "../store";
 import { returnErrors } from "./errorActions";
 
@@ -31,4 +31,12 @@ export const login = ({ email, password }) => dispatch => {
         type: LOGIN_FAIL
       });
     });
+};
+
+
+// Logout User
+export const logout = () => {
+  return {
+    type: LOGOUT_SUCCESS
+  };
 };

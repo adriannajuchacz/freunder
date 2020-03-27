@@ -10,6 +10,7 @@ import Menu from "@material-ui/core/Menu";
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import { logout } from "../actions/authActions";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -27,11 +28,10 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function MenuAppBar({isAuthenticated}) {
+function MenuAppBar({ isAuthenticated, logout }) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -39,6 +39,11 @@ function MenuAppBar({isAuthenticated}) {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    logout()
+    handleClose()
   };
 
   return (
@@ -76,7 +81,7 @@ function MenuAppBar({isAuthenticated}) {
               >
                 <MenuItem onClick={handleClose}>Settings</MenuItem>
                 <MenuItem onClick={handleClose}>Events</MenuItem>
-                <MenuItem onClick={handleClose}>Log out</MenuItem>
+                <MenuItem onClick={handleLogout}>Log out</MenuItem>
               </Menu>
             </div>
           ) : (
@@ -95,4 +100,4 @@ function MenuAppBar({isAuthenticated}) {
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated
 });
-export default connect(mapStateToProps)(MenuAppBar);
+export default connect(mapStateToProps, { logout })(MenuAppBar);
