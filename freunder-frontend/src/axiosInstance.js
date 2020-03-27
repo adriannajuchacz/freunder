@@ -5,9 +5,12 @@ export const axiosInstance = axios.create({
   timeout: 1000
 });
 
-const token = localStorage.getItem("token");
+
 axiosInstance.interceptors.request.use(
-  function(config) {
+  async function(config) {
+    await setTimeout(() => {
+    }, 1000);
+    const token = localStorage.getItem("token");
     config.headers = { ...config.headers, Authorization: "Bearer " + token };
     return config;
   },

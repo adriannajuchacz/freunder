@@ -39,7 +39,7 @@ export class Login extends Component {
       }
     }
     if (isAuthenticated) {
-      this.props.history.push('/main')
+      this.props.history.push('/')
     }
   }
   render() {
