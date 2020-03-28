@@ -2,6 +2,7 @@ import axios from "axios";
 
 export const axiosInstance = axios.create({
   baseURL: "https://freunder.uber.space/",
+  //baseURL: "http://localhost:7878/",
   timeout: 1000
 });
 
