@@ -1,43 +1,43 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const bcrypt = require('bcryptjs');
+const bcrypt = require("bcryptjs");
 // Load User model
-const User = require('../models/User');
-const jwt = require('jsonwebtoken');
+const User = require("../models/User");
+const jwt = require("jsonwebtoken");
 
 // Register
-router.post('/register', (req, res) => {
+router.post("/register", (req, res) => {
   const { name, email, password, password2 } = req.body;
   let errors = [];
 
   if (!name || !email || !password || !password2) {
-    errors.push({ msg: 'Please enter all fields' });
+    errors.push({ msg: "Please enter all fields" });
   }
 
   if (password != password2) {
-    errors.push({ msg: 'Passwords do not match' });
+    errors.push({ msg: "Passwords do not match" });
   }
 
   if (password.length < 6) {
-    errors.push({ msg: 'Password must be at least 6 characters' });
+    errors.push({ msg: "Password must be at least 6 characters" });
   }
 
   if (errors.length > 0) {
     res.status(400).send({
-      success: 'false',
+      success: "false",
       messages: errors,
       register_data: req.body
-    })
+    });
     return;
   } else {
     User.findOne({ email: email }).then(user => {
       if (user) {
-        errors.push({ msg: 'Email already exists' });
+        errors.push({ msg: "Email already exists" });
         res.status(400).send({
-          success: 'false',
+          success: "false",
           messages: errors,
           register_data: req.body
-        })
+        });
       } else {
         const newUser = new User({
           name,
@@ -49,16 +49,27 @@ router.post('/register', (req, res) => {
           bcrypt.hash(newUser.password, salt, (err, hash) => {
             if (err) throw err;
             newUser.password = hash;
-            newUser.createdEvents = []
-            newUser.attendedEvents = []
+            newUser.createdEvents = [];
+            newUser.attendedEvents = [];
             newUser
               .save()
               .then(user => {
-                res.status(200).send({
-                  success: 'true',
-                  message: 'You are now registered and can log in',
-                  user: user
-                })
+                jwt.sign(
+                  {
+                    exp: Math.floor(Date.now() / 1000) + 60 * 60,
+                    user: user
+                  },
+                  "secretkey",
+                  (err, token) => {
+                    res.status(200).send({
+                      success: "true",
+                      message: "You are now registered and can log in",
+                      user: user,
+                      token: token
+                    });
+                    return;
+                  }
+                );
               })
               .catch(err => console.log(err));
           });
@@ -69,16 +80,16 @@ router.post('/register', (req, res) => {
 });
 
 // Login
-router.post('/login', (req, res, next) => {
+router.post("/login", (req, res, next) => {
   User.findOne({
     email: req.body.email
   }).then(user => {
     // Match email
     if (!user) {
       res.status(401).send({
-        success: 'false',
-        message: 'That email is not registered'
-      })
+        success: "false",
+        message: "That email is not registered"
+      });
       return;
     }
 
@@ -86,24 +97,27 @@ router.post('/login', (req, res, next) => {
     bcrypt.compare(req.body.password, user.password, (err, isMatch) => {
       if (err) throw err;
       if (isMatch) {
-        jwt.sign({
-          exp: Math.floor(Date.now() / 1000) + (60 * 60),
-          user: user
-        }, 'secretkey',
-        (err, token) => {
-          res.status(200).send({
-            success: 'true',
-            message: 'Successfully logged in',
-            user: user,
-            token: token
-          })
-          return;
-        });
+        jwt.sign(
+          {
+            exp: Math.floor(Date.now() / 1000) + 60 * 60,
+            user: user
+          },
+          "secretkey",
+          (err, token) => {
+            res.status(200).send({
+              success: "true",
+              message: "Successfully logged in",
+              user: user,
+              token: token
+            });
+            return;
+          }
+        );
       } else {
         res.status(401).send({
-          success: 'false',
-          message: 'Password incorrect'
-        })
+          success: "false",
+          message: "Password incorrect"
+        });
         return;
       }
     });
@@ -111,13 +125,13 @@ router.post('/login', (req, res, next) => {
 });
 
 // Logout
-router.get('/logout', (req, res) => {
+router.get("/logout", (req, res) => {
   req.logout();
   res.status(200).send({
-    success: 'true',
-    message: 'Successfully logged out',
+    success: "true",
+    message: "Successfully logged out",
     user: user
-  })
+  });
 });
 
 module.exports = router;
