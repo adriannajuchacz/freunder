@@ -5,14 +5,15 @@ import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import Main from "./components/Main";
 import NewEvent from "./components/event/NewEvent";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { Router, Route } from "react-router-dom";
 import "./App.css";
 import { connect } from "react-redux";
+import history from './history';
 
 class App extends Component {
   render() {
     return (
-      <Router>
+      <Router history={history}>
         <div className="App">
           <Navbar></Navbar>
           <Route exact path="/">

@@ -11,10 +11,12 @@ import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { logout } from "../actions/authActions";
+import history from "../history";
 
 const useStyles = makeStyles(theme => ({
   root: {
-    flexGrow: 1
+    flexGrow: 1,
+    marginBottom: "5rem"
   },
   menuButton: {
     marginRight: theme.spacing(2)
@@ -41,14 +43,22 @@ function MenuAppBar({ isAuthenticated, logout }) {
     setAnchorEl(null);
   };
 
+  const handleSettings = () => {
+    history.push("/register");
+    handleClose();
+  };
+  const handleEvents = () => {
+    history.push("/");
+    handleClose();
+  };
   const handleLogout = () => {
-    logout()
-    handleClose()
+    logout();
+    handleClose();
   };
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar position="fixed">
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
             FREUNDER
@@ -79,8 +89,8 @@ function MenuAppBar({ isAuthenticated, logout }) {
                 open={open}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>Settings</MenuItem>
-                <MenuItem onClick={handleClose}>Events</MenuItem>
+                <MenuItem onClick={handleSettings}>Settings</MenuItem>
+                <MenuItem onClick={handleEvents}>Events</MenuItem>
                 <MenuItem onClick={handleLogout}>Log out</MenuItem>
               </Menu>
             </div>
