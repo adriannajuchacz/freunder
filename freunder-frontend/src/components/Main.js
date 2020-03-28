@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import Button from "@material-ui/core/Button";
 import EventList from "./event/EventList";
 import Calendar from "./event/EventCalendar";
-import ButtonGroup from "@material-ui/core/ButtonGroup";
+import ToggleButtons from "./building-blocks/ToggleButtons";
 
 export class Main extends Component {
   constructor(props) {
@@ -13,6 +12,12 @@ export class Main extends Component {
     this.setEvents = this.setEvents.bind(this);
     this.setCalendar = this.setCalendar.bind(this);
   }
+  handleLanguage = newAlignment => {
+    if (newAlignment) {
+      let isEventsOn = newAlignment === "left";
+      this.setState({ isEventsOn: isEventsOn });
+    }
+  };
   setEvents() {
     this.setState(state => ({
       isEventsOn: true
@@ -26,10 +31,7 @@ export class Main extends Component {
   render() {
     return (
       <div>
-        <ButtonGroup color="primary" aria-label="outlined primary button group">
-          <Button onClick={this.setEvents}>Events</Button>
-          <Button onClick={this.setCalendar}>Calendar</Button>
-        </ButtonGroup>
+        <ToggleButtons onSelectLanguage={this.handleLanguage}></ToggleButtons>
         {this.state.isEventsOn ? <EventList /> : <Calendar />}
       </div>
     );
