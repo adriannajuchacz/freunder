@@ -44,7 +44,8 @@ function MenuAppBar({ isAuthenticated, logout }) {
   };
 
   const handleSettings = () => {
-    history.push("/register");
+    history.push("/register",{ settings: true });
+    
     handleClose();
   };
   const handleEvents = () => {

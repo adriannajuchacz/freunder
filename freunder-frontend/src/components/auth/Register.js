@@ -10,14 +10,15 @@ import { connect } from "react-redux";
 import Alert from "@material-ui/lab/Alert";
 
 export class Register extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      email: "",
-      name: "",
+      email: props.user ? props.user.email : "",
+      name: props.user ? props.user.name :"",
       password: "",
       password2: "",
-      msg: []
+      msg: [],
+      user: props.user
     };
   }
   onChange = e => {
@@ -42,7 +43,8 @@ export class Register extends Component {
         this.setState({ msg: [] });
       }
     }
-    if (isAuthenticated) {
+    //when navbars' "settings" clicked => state.settings is true
+    if (isAuthenticated && (this.props.location.state===undefined || !this.props.location.state.settings)) {
       this.props.history.push("/");
     }
   }
@@ -51,6 +53,7 @@ export class Register extends Component {
       <div>
         <Grid container justify="center" alignItems="center">
           <Grid item md={6} xs={10}>
+            <h2>{ (this.props.location.state && this.props.location.state.settings) ? 'Update your profile:' : 'Create your profile:'  }</h2>
             <Box borderColor="primary.main" borderRadius={16} p={4} border={1}>
               <form>
                 {this.state.msg.map(e => (
@@ -61,6 +64,7 @@ export class Register extends Component {
                     margin="normal"
                     label="email"
                     name="email"
+                    value={this.state.email}
                     onChange={this.onChange}
                   />
                   <br />
@@ -68,6 +72,7 @@ export class Register extends Component {
                     margin="normal"
                     name="name"
                     label="name"
+                    value={this.state.name}
                     onChange={this.onChange}
                   />
                   <br />
@@ -96,7 +101,7 @@ export class Register extends Component {
                     margin="normal"
                     onClick={this.onSubmit}
                   >
-                    Register
+                   { (this.props.location.state && this.props.location.state.settings) ? 'Update' : 'Register'  }
                   </Button>
                 </Grid>
               </form>
@@ -113,6 +118,7 @@ Register.propTypes = {
 };
 const mapStateToProps = state => ({
   error: state.error,
-  isAuthenticated: state.auth.isAuthenticated
+  isAuthenticated: state.auth.isAuthenticated,
+  user: state.auth.user
 });
 export default connect(mapStateToProps, { register })(Register);
