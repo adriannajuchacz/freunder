@@ -8,21 +8,27 @@ import NewEvent from "./components/event/NewEvent";
 import { Router, Route } from "react-router-dom";
 import "./App.css";
 import { connect } from "react-redux";
-import history from './history';
+import history from "./history";
+import { MuiPickersUtilsProvider } from "@material-ui/pickers";
+import MomentUtils from "@date-io/moment";
 
 class App extends Component {
   render() {
     return (
       <Router history={history}>
-        <div className="App">
-          <Navbar></Navbar>
-          <Route exact path="/">
-            {this.props.isAuthenticated ? <Main /> : <Welcome />}
-          </Route>
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/register" component={Register} />
-          <Route exact path="/newEvent" component={NewEvent} />
-        </div>
+        <MuiPickersUtilsProvider utils={MomentUtils}>
+          <div className="App">
+            <Navbar></Navbar>
+            <Route exact path="/">
+              {this.props.isAuthenticated ? <Main /> : <Welcome />}
+            </Route>
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/register" component={Register} />
+            <Route exact path="/newEvent">
+              {this.props.isAuthenticated ? <NewEvent /> : <Welcome />}
+            </Route>
+          </div>
+        </MuiPickersUtilsProvider>
       </Router>
     );
   }

@@ -1,12 +1,35 @@
 import React, { Component } from "react";
+import moment from "moment";
 import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
-import { login } from "../../actions/authActions";
+import { KeyboardDateTimePicker } from "@material-ui/pickers";
 
 class NewEvent extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      title: "",
+      location: "",
+      description: "",
+      imgLink: "",
+      link: "",
+      start: moment(),
+      end: moment(),
+      msg: []
+    };
+  }
+  onChange = e => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
+  onStartDateChange = e => {
+    this.setState({ start: e });
+  };
+  onEndDateChange = e => {
+    this.setState({ end: e });
+  };
   render() {
     return (
       <div>
@@ -15,26 +38,52 @@ class NewEvent extends Component {
             <Box borderColor="primary.main" borderRadius={16} p={4} border={1}>
               <form>
                 <FormControl fullWidth>
-                  <TextField
-                    id="standard-basic"
-                    margin="normal"
-                    label="email"
-                  />
+                  <TextField margin="normal" label="title" name="title" />
                   <br />
-                  <TextField id="standard-basic" margin="normal" label="name" />
+                  <TextField margin="normal" label="location" name="location" />
                   <br />
                   <TextField
-                    id="standard-basic"
                     margin="normal"
-                    type="password"
-                    label="password"
+                    label="location"
+                    name="location"
+                    multiline
+                    rows="3"
                   />
                   <br />
                   <TextField
-                    id="standard-basic"
                     margin="normal"
-                    type="password"
-                    label="re-enter password"
+                    label="paste an url of an image of choice"
+                    name="imgLink"
+                  />
+                  <br />
+                  <TextField
+                    margin="normal"
+                    label="paste a link to the event"
+                    name="link"
+                  />
+                  <br />
+                  <KeyboardDateTimePicker
+                    value={this.state.start}
+                    onChange={this.onStartDateChange}
+                    label="start of the event"
+                    name="start"
+                    variant="dialog"
+                    ampm={false}
+                    onError={console.log}
+                    disablePast
+                    format="YYYY/MM/DD HH:mm"
+                  />
+                  <br />
+                  <KeyboardDateTimePicker
+                    value={this.state.end}
+                    onChange={this.onEndDateChange}
+                    label="end of the event"
+                    name="end"
+                    variant="dialog"
+                    ampm={false}
+                    onError={console.log}
+                    disablePast
+                    format="YYYY/MM/DD HH:mm"
                   />
                   <br />
                 </FormControl>
@@ -44,9 +93,9 @@ class NewEvent extends Component {
                     color="primary"
                     size="large"
                     margin="normal"
-                    onClick={login()}
+                    onClick={console.log("NEW EVENT CLICKED")}
                   >
-                    Register
+                    Add
                   </Button>
                 </Grid>
               </form>
