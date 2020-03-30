@@ -1,4 +1,4 @@
-import { GET_EVENTS } from "./types";
+import { GET_EVENTS, LOGOUT_SUCCESS } from "./types";
 import store from "../store";
 import { axiosInstance } from "../axiosInstance";
 import { returnErrors } from "./errorActions";
@@ -12,7 +12,10 @@ export const getEvents = () => dispatch => {
         payload: res.data
       });
     })
-    .catch(err =>
-      dispatch(returnErrors(err.response.data, err.response.status))
-    );
+    .catch(err => {
+      dispatch(returnErrors(err.response.data, err.response.status));
+      dispatch({
+        type: LOGOUT_SUCCESS
+      });
+    });
 };
