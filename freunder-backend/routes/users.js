@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const bcrypt = require("bcryptjs");
 // Load User model
 const User = require("../models/User");
 
@@ -61,21 +62,33 @@ router.put("/:id", (req, res) => {
       email,
       password
     });
-    User.findOne({ _id: req.params.id }).then(user => {
-      if (!user) {
-        res.status(404).send({
-          success: "false",
-          message: "No user found"
+    bcrypt.genSalt(10, (err, salt) => {
+      bcrypt.hash(updatedUser.password, salt, (err, hash) => {
+        if (err) throw err;
+        updatedUser.password = hash;
+        const updatedData = {
+          $set: {
+            name: updatedUser.name,
+            email: updatedUser.email,
+            password: updatedUser.password
+          }
+        };
+        User.updateOne({ _id: req.params.id }, updatedData, err => {
+          if (err) {
+            res.status(403).send({
+              success: "false",
+              message: "User not updated",
+              user: updatedUser
+            });
+          }
+        }).then(mama => {
+          res.status(200).send({
+            success: "true",
+            message: "User updated successfully",
+            user: updatedUser
+          });
         });
-      } else {
-        user.delete()
-        updatedUser.save()
-        res.status(200).send({
-          success: "true",
-          message: "User updated successfully",
-          user: updatedUser
-        });
-      }
+      });
     });
   }
 });
