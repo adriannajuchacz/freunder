@@ -34,20 +34,35 @@ router.get("/:id", (req, res) => {
 
 // CREATE EVENT
 router.post("/", (req, res) => {
-  let { name, link, location, date, user_id } = req.body;
+  let {
+    title,
+    location,
+    description,
+    imgLink,
+    link,
+    start,
+    end,
+    user_id
+  } = req.body;
   let errors = [];
   //TODO: validation
-  if (!name || !link || !location || !user_id) {
+  if (!title || !location || !description || !imgLink || !link || !user_id) {
     errors.push({ msg: "Please enter all fields" });
   }
   User.findOne({ _id: user_id }).then(user => {
     if (!user) {
       errors.push({ msg: "User not found" });
     }
-    if (!date) {
-      date = Date.now();
+    // TODO: start & should come from frontend
+    if (!start) {
+      start = Date.now();
     } else {
-      date = Date.parse(date);
+      start = Date.parse(start);
+    }
+    if (!end) {
+      end = Date.now();
+    } else {
+      end = Date.parse(end);
     }
     if (errors.length > 0) {
       res.status(400).send({
@@ -58,10 +73,13 @@ router.post("/", (req, res) => {
       return;
     }
     const newEvent = new Event({
-      name,
-      link,
+      title,
       location,
-      date
+      description,
+      imgLink,
+      link,
+      start,
+      end
     });
     // SAVE USER
     user.createdEvents.push(newEvent);
