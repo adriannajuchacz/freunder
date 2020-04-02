@@ -13,17 +13,11 @@ import { returnErrors } from "./errorActions";
 
 // Login User
 export const login = ({ email, password }) => dispatch => {
-  // Headers
-  const config = {
-    headers: {
-      "Content-Type": "application/json"
-    }
-  };
 
   // Request body
   const body = JSON.stringify({ email, password });
   axiosInstance
-    .post("/login", body, config)
+    .post("/login", body)
     .then(res => {
       store.dispatch({
         type: LOGIN_SUCCESS,
@@ -49,18 +43,11 @@ export const logout = () => {
 
 // Register User
 export const register = ({ name, email, password, password2 }) => dispatch => {
-  // Headers
-  const config = {
-    headers: {
-      "Content-Type": "application/json"
-    }
-  };
-
   // Request body
   const body = JSON.stringify({ name, email, password, password2 });
 
   axiosInstance
-    .post("/register", body, config)
+    .post("/register", body)
     .then(res =>
       dispatch({
         type: REGISTER_SUCCESS,
@@ -85,19 +72,11 @@ export const update = ({
   password2,
   userId
 }) => dispatch => {
-  console.log("authActions update");
-  // Headers
-  const config = {
-    headers: {
-      "Content-Type": "application/json"
-    }
-  };
-
   // Request body
   const body = JSON.stringify({ name, email, password, password2 });
 
   axiosInstance
-    .put("/users/" + userId, body, config)
+    .put("/users/" + userId, body)
     .then(res =>
       dispatch({
         type: UPDATE_SUCCESS,

@@ -15,3 +15,5 @@ export const UPDATE_FAIL = "REGISTER_FAIL";
 export const GET_ERRORS = 'GET_ERRORS';
 export const CLEAR_ERRORS = 'CLEAR_ERRORS';
 export const RESET_RESPONSE_MSG = 'RESET_RESPONSE_MSG';
+export const ADD_EVENT_SUCCESS = 'ADD_EVENT_SUCCESS';
+export const ADD_EVENT_FAIL = 'ADD_EVENT_FAIL';

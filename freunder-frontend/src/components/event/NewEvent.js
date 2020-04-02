@@ -6,6 +6,9 @@ import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import { KeyboardDateTimePicker } from "@material-ui/pickers";
+import { addEvent } from "../../actions/eventActions";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 
 class NewEvent extends Component {
   constructor(props) {
@@ -18,7 +21,8 @@ class NewEvent extends Component {
       link: "",
       start: moment(),
       end: moment(),
-      msg: []
+      msg: [],
+      user: JSON.parse(localStorage.getItem("user"))
     };
   }
   onChange = e => {
@@ -30,6 +34,33 @@ class NewEvent extends Component {
   onEndDateChange = e => {
     this.setState({ end: e });
   };
+  onSubmit = () => {
+    let {
+      title,
+      location,
+      description,
+      imgLink,
+      link,
+      start,
+      end,
+      user
+    } = this.state;
+    start = start.toDate().toJSON()
+    end = end.toDate().toJSON()
+    const userData = {
+      title,
+      location,
+      description,
+      imgLink,
+      link,
+      start,
+      end
+    };
+
+    const user_id = user._id;
+    debugger
+    this.props.addEvent({ ...userData, user_id });
+  };
   render() {
     return (
       <div>
@@ -38,28 +69,46 @@ class NewEvent extends Component {
             <Box borderColor="primary.main" borderRadius={16} p={4} border={1}>
               <form>
                 <FormControl fullWidth>
-                  <TextField margin="normal" label="title" name="title" />
-                  <br />
-                  <TextField margin="normal" label="location" name="location" />
+                  <TextField
+                    margin="normal"
+                    label="title"
+                    name="title"
+                    value={this.state.title}
+                    onChange={this.onChange}
+                  />
                   <br />
                   <TextField
                     margin="normal"
                     label="location"
                     name="location"
+                    value={this.state.location}
+                    onChange={this.onChange}
+                  />
+                  <br />
+                  <TextField
+                    margin="normal"
+                    label="description"
+                    name="description"
                     multiline
                     rows="3"
+                    value={this.state.description}
+                    onChange={this.onChange}
                   />
                   <br />
                   <TextField
                     margin="normal"
                     label="paste an url of an image of choice"
                     name="imgLink"
+                    value={this.state.imgLink}
+                    onChange={this.onChange}
                   />
                   <br />
                   <TextField
                     margin="normal"
                     label="paste a link to the event"
                     name="link"
+                    value={this.state.link}
+                    onChange={this.onChange}
                   />
                   <br />
                   <KeyboardDateTimePicker
@@ -93,7 +142,7 @@ class NewEvent extends Component {
                     color="primary"
                     size="large"
                     margin="normal"
-                    onClick={console.log("NEW EVENT CLICKED")}
+                    onClick={this.onSubmit}
                   >
                     Add
                   </Button>
@@ -107,4 +156,11 @@ class NewEvent extends Component {
   }
 }
 
-export default NewEvent;
+NewEvent.propTypes = {
+  error: PropTypes.object.isRequired,
+  addEvent: PropTypes.func.isRequired
+};
+const mapStateToProps = state => ({
+  error: state.error
+});
+export default connect(mapStateToProps, { addEvent })(NewEvent);

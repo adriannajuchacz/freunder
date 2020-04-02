@@ -12,7 +12,7 @@ axiosInstance.interceptors.request.use(
     await setTimeout(() => {
     }, 1000);
     const token = localStorage.getItem("token");
-    config.headers = { ...config.headers, Authorization: "Bearer " + token };
+    config.headers = { ...config.headers, Authorization: "Bearer " + token, "Content-Type": "application/json" };
     return config;
   },
   function(error) {
