@@ -1,8 +1,7 @@
 import {
   GET_EVENTS,
   ADD_EVENT,
-  ADD_EVENT_SUCCESS,
-  ADD_EVENT_FAIL
+  ADD_EVENT_SUCCESS
 } from "../actions/types";
 
 const initialState = {
@@ -13,7 +12,6 @@ const initialState = {
 const eventsReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_EVENT:
-    case ADD_EVENT_FAIL:
     case GET_EVENTS:
       return {
         ...state,

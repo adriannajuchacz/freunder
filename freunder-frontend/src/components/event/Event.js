@@ -6,6 +6,7 @@ import LanguageIcon from "@material-ui/icons/Language";
 import ScheduleIcon from "@material-ui/icons/Schedule";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
+import { Link } from "react-router-dom";
 
 class Event extends Component {
   dateToString(date) {
@@ -33,31 +34,51 @@ class Event extends Component {
               <Grid container direction="column" spacing={2}>
                 <Grid item xs>
                   <Box textAlign="left">
-                    <Typography component={'span'} color="primary">
+                    <Typography component={"span"} color="primary">
                       <Grid container direction="row" justify="space-between">
                         <Grid item>
                           <Grid container alignItems="center">
                             <LocationOnIcon></LocationOnIcon>
                             <p>{this.props.event.location}</p>
-                            <br/>
+                            <br />
                             <LanguageIcon></LanguageIcon>
-                            <a href={this.props.event.link} style={{textDecoration: "none"}}><p>website</p></a>  
+                            <a
+                              href={this.props.event.link}
+                              style={{ textDecoration: "none" }}
+                            >
+                              <p>website</p>
+                            </a>
                           </Grid>
                         </Grid>
                         <Grid item>
                           <Grid container alignItems="center">
                             <ScheduleIcon></ScheduleIcon>
-                            <p>{this.dateToString(this.props.event.start)} - {this.dateToString(this.props.event.end)}</p>
+                            <p>
+                              {this.dateToString(this.props.event.start)} -{" "}
+                              {this.dateToString(this.props.event.end)}
+                            </p>
                           </Grid>
                         </Grid>
                       </Grid>
                     </Typography>
-                    <h3  style={{textTransform: 'uppercase', margin: '0'}}>{this.props.event.title}</h3>
+                    <h3 style={{ textTransform: "uppercase", margin: "0" }}>
+                      {this.props.event.title}
+                    </h3>
                     <p>{this.props.event.description}</p>
                   </Box>
                 </Grid>
                 <Grid item>
                   <Grid container justify="flex-end">
+                    <Link to="/newEvent" style={{ textDecoration: "none", marginRight: "7px" }}>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        size="large"
+                        margin="normal"
+                      >
+                        change event
+                      </Button>
+                    </Link>
                     <Button
                       variant="contained"
                       color="primary"

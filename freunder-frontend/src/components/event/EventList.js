@@ -28,7 +28,7 @@ class EventList extends Component {
           <Grid item container xs={12}>
             <Grid container justify="center">
               <Grid md={8} xs={10}>
-                <Link to="/newEvent">
+                <Link to="/newEvent" style={{textDecoration: "none"}}>
                   <Button
                     fullWidth
                     size="large"

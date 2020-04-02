@@ -7,11 +7,11 @@ export class Welcome extends Component {
     return (
       <div>
         <h1>WELCOME.JS</h1>
-        <Link to="/login">
-          <Button variant="contained">Login</Button>
+        <Link to="/login" style={{textDecoration: "none"}}>
+          <Button variant="contained" >Login</Button>
         </Link>
 
-        <Link to="/register">
+        <Link to="/register" style={{textDecoration: "none"}}>
           <Button variant="contained">Register</Button>
         </Link>
       </div>

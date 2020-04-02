@@ -9,6 +9,7 @@ import { KeyboardDateTimePicker } from "@material-ui/pickers";
 import { addEvent } from "../../actions/eventActions";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import Alert from "@material-ui/lab/Alert";
 
 class NewEvent extends Component {
   constructor(props) {
@@ -67,6 +68,18 @@ class NewEvent extends Component {
         this.props.history.push("/");
       }
     }
+    const { error } = this.props;
+        if (error !== prevProps.error) {
+      if (error.id === "ADD_EVENT_FAIL") {
+        let errors = [];
+        error.msg.messages.forEach(el => {
+          errors.push(el.msg);
+        });
+        this.setState({ msg: errors });
+      } else {
+        this.setState({ msg: [] });
+      }
+    }
   }
   render() {
     return (
@@ -75,6 +88,9 @@ class NewEvent extends Component {
           <Grid item md={6} xs={10}>
             <Box borderColor="primary.main" borderRadius={16} p={4} border={1}>
               <form>
+                {this.state.msg.map(e => (
+                  <Alert severity="error">{e}</Alert>
+                ))}
                 <FormControl fullWidth>
                   <TextField
                     margin="normal"

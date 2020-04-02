@@ -23,12 +23,19 @@ const useStyles = makeStyles(theme => ({
   },
   title: {
     flexGrow: 1,
-    fontFamily: 'Pacifico, cursive',
-    fontSize: '2.6rem'
+    fontFamily: "Pacifico, cursive",
+    fontSize: "2.6rem"
   },
   whiteBtn: {
     color: "#fff !important",
-    borderColor: "#fff !important"
+    borderColor: "#fff !important",
+    marginLeft: "10px"
+  },
+  menu :{
+    top: '50px!important'
+  },
+  userIcon: {
+    marginRight: "7px"
   }
 }));
 
@@ -36,6 +43,7 @@ function MenuAppBar({ isAuthenticated, logout }) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const user = JSON.parse(localStorage.getItem("user"))
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -46,8 +54,8 @@ function MenuAppBar({ isAuthenticated, logout }) {
   };
 
   const handleSettings = () => {
-    history.push("/register",{ settings: true });
-    
+    history.push("/register", { settings: true });
+
     handleClose();
   };
   const handleEvents = () => {
@@ -57,6 +65,7 @@ function MenuAppBar({ isAuthenticated, logout }) {
   const handleLogout = () => {
     logout();
     handleClose();
+    history.push("/");
   };
 
   return (
@@ -75,7 +84,7 @@ function MenuAppBar({ isAuthenticated, logout }) {
                 onClick={handleMenu}
                 color="inherit"
               >
-                <AccountCircle />
+                <AccountCircle className={classes.userIcon} /> {user ? user.name : null}
               </IconButton>
               <Menu
                 id="menu-appbar"
@@ -91,18 +100,26 @@ function MenuAppBar({ isAuthenticated, logout }) {
                 }}
                 open={open}
                 onClose={handleClose}
+                className={classes.menu}
               >
-                <MenuItem onClick={handleSettings}>Settings</MenuItem>
+                <MenuItem onClick={handleSettings}>Update user profile</MenuItem>
                 <MenuItem onClick={handleEvents}>Events</MenuItem>
                 <MenuItem onClick={handleLogout}>Log out</MenuItem>
               </Menu>
             </div>
           ) : (
-            <Link to="/login">
-              <Button variant="outlined" className={classes.whiteBtn}>
-                Log in
-              </Button>
-            </Link>
+            <div>
+              <Link to="/login" style={{textDecoration: "none"}}>
+                <Button variant="outlined" className={classes.whiteBtn}>
+                  Log in
+                </Button>
+              </Link>
+              <Link to="/register" style={{textDecoration: "none"}}>
+                <Button variant="outlined" className={classes.whiteBtn}>
+                  Register
+                </Button>
+              </Link>
+            </div>
           )}
         </Toolbar>
       </AppBar>
