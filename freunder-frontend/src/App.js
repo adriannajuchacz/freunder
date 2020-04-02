@@ -24,9 +24,7 @@ class App extends Component {
             </Route>
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
-            <Route exact path="/newEvent">
-              {this.props.isAuthenticated ? <NewEvent /> : <Welcome />}
-            </Route>
+            <Route exact path="/newEvent" component={this.props.isAuthenticated ? NewEvent : Welcome }/>
           </div>
         </MuiPickersUtilsProvider>
       </Router>

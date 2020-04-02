@@ -6,18 +6,23 @@ import {
 } from "../actions/types";
 
 const initialState = {
-  events: []
+  events: [],
+  responseMsg: ""
 };
 
 const eventsReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_EVENT:
-    case ADD_EVENT_SUCCESS:
     case ADD_EVENT_FAIL:
     case GET_EVENTS:
       return {
         ...state,
         events: action.payload.events
+      };
+    case ADD_EVENT_SUCCESS:
+      return {
+        ...state,
+        responseMsg: "ADD_EVENT_SUCCESS"
       };
     default:
       return state;

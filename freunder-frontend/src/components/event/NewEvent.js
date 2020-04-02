@@ -45,8 +45,8 @@ class NewEvent extends Component {
       end,
       user
     } = this.state;
-    start = start.toDate().toJSON()
-    end = end.toDate().toJSON()
+    start = start.toDate().toJSON();
+    end = end.toDate().toJSON();
     const userData = {
       title,
       location,
@@ -58,9 +58,16 @@ class NewEvent extends Component {
     };
 
     const user_id = user._id;
-    debugger
     this.props.addEvent({ ...userData, user_id });
   };
+  componentDidUpdate(prevProps) {
+    const { responseMsg } = this.props;
+    if (responseMsg !== prevProps.responseMsg) {
+      if (responseMsg === "ADD_EVENT_SUCCESS") {
+        this.props.history.push("/");
+      }
+    }
+  }
   render() {
     return (
       <div>
@@ -161,6 +168,7 @@ NewEvent.propTypes = {
   addEvent: PropTypes.func.isRequired
 };
 const mapStateToProps = state => ({
-  error: state.error
+  error: state.error,
+  responseMsg: state.event.responseMsg
 });
 export default connect(mapStateToProps, { addEvent })(NewEvent);

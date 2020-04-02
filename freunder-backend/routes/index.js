@@ -56,7 +56,7 @@ router.post("/register", (req, res) => {
               .then(user => {
                 jwt.sign(
                   {
-                    exp: Math.floor(Date.now() / 1000) + 60 * 60,
+                    exp: Math.floor(Date.now() / 1000) + 180 * 60,
                     user: user
                   },
                   "secretkey",

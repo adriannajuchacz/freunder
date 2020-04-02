@@ -23,7 +23,6 @@ export const getEvents = () => dispatch => {
 export const addEvent = ({ title, location, description, imgLink, link, start, end, user_id }) => dispatch => {
     // Request body
   const body = JSON.stringify({ title, location, description, imgLink, link, start, end, user_id });
-  debugger
     axiosInstance
     .post("/events", body)
     .then(res =>
@@ -34,7 +33,7 @@ export const addEvent = ({ title, location, description, imgLink, link, start, e
     )
     .catch(err => {
       dispatch(
-        returnErrors(err.response.data, err.response.status, "REGISTER_FAIL")
+        returnErrors(err.response.data, err.response.status, "ADD_EVENT_FAIL")
       );
       dispatch({
         type: ADD_EVENT_FAIL
