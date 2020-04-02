@@ -24,7 +24,7 @@ class EventList extends Component {
     ));
     return (
       <div>
-        <Grid container direction="column" justify="center" spacing={3}>
+        <Grid container direction="column" justify="center" spacing={3} style={{flexWrap: "initial"}}>
           <Grid item container xs={12}>
             <Grid container justify="center">
               <Grid md={8} xs={10}>
