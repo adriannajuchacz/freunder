@@ -22,7 +22,9 @@ const useStyles = makeStyles(theme => ({
     marginRight: theme.spacing(2)
   },
   title: {
-    flexGrow: 1
+    flexGrow: 1,
+    fontFamily: 'Pacifico, cursive',
+    fontSize: '2.6rem'
   },
   whiteBtn: {
     color: "#fff !important",
@@ -62,7 +64,7 @@ function MenuAppBar({ isAuthenticated, logout }) {
       <AppBar position="fixed">
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            FREUNDER
+            freunder
           </Typography>
           {isAuthenticated ? (
             <div>
