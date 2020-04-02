@@ -4,7 +4,9 @@ import {
   LOGIN_FAIL,
   LOGOUT_SUCCESS,
   REGISTER_SUCCESS,
-  REGISTER_FAIL
+  REGISTER_FAIL,
+  UPDATE_SUCCESS,
+  RESET_RESPONSE_MSG
 } from "../actions/types";
 import store from "../store";
 import { returnErrors } from "./errorActions";
@@ -46,7 +48,7 @@ export const logout = () => {
 };
 
 // Register User
-export const register = ({ name, email, password, password2  }) => dispatch => {
+export const register = ({ name, email, password, password2 }) => dispatch => {
   // Headers
   const config = {
     headers: {
@@ -73,4 +75,44 @@ export const register = ({ name, email, password, password2  }) => dispatch => {
         type: REGISTER_FAIL
       });
     });
+};
+
+// Update User
+export const update = ({
+  name,
+  email,
+  password,
+  password2,
+  userId
+}) => dispatch => {
+  console.log("authActions update");
+  // Headers
+  const config = {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  };
+
+  // Request body
+  const body = JSON.stringify({ name, email, password, password2 });
+
+  axiosInstance
+    .put("/users/" + userId, body, config)
+    .then(res =>
+      dispatch({
+        type: UPDATE_SUCCESS,
+        payload: res.data
+      })
+    )
+    .catch(err => {
+      dispatch(
+        returnErrors(err.response.data, err.response.status, "UPDATE_FAIL")
+      );
+    });
+};
+
+export const resetResponseMsg = () => dispatch => {
+  dispatch({
+    type: RESET_RESPONSE_MSG
+  });
 };

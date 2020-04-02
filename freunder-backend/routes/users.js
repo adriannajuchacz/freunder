@@ -92,7 +92,7 @@ router.put("/:id", (req, res) => {
             (err, token) => {
               res.status(200).send({
                 success: "true",
-                message: "User retrieved successfully",
+                message: "User updated successfully",
                 user: updatedUser,
                 token: token
               });

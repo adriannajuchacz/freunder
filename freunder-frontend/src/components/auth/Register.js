@@ -4,7 +4,7 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
-import { register } from "../../actions/authActions";
+import { register, update, resetResponseMsg } from "../../actions/authActions";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Alert from "@material-ui/lab/Alert";
@@ -14,11 +14,13 @@ export class Register extends Component {
     super(props);
     this.state = {
       email: props.user ? props.user.email : "",
-      name: props.user ? props.user.name :"",
+      name: props.user ? props.user.name : "",
       password: "",
       password2: "",
       msg: [],
-      user: props.user
+      user: JSON.parse(localStorage.getItem("user")),
+      isSettings:
+        props.location.state !== undefined && props.location.state.settings
     };
   }
   onChange = e => {
@@ -26,14 +28,23 @@ export class Register extends Component {
   };
 
   onSubmit = () => {
-    const { email, name, password, password2 } = this.state;
-    this.props.register({ email, name, password, password2 });
+    const { email, name, password, password2, user } = this.state;
+    const userData = { email, name, password, password2 };
+    if (this.state.isSettings) {
+      const userId = user._id;
+      this.props.update({ ...userData, userId });
+    } else {
+      this.props.register({ ...userData });
+    }
   };
+  componentDidMount() {
+    this.props.resetResponseMsg();
+  }
   componentDidUpdate(prevProps) {
     const { error } = this.props;
-    const { isAuthenticated } = this.props;
+    const { responseMsg } = this.props;
     if (error !== prevProps.error) {
-      if (error.id === "REGISTER_FAIL") {
+      if (error.id === "REGISTER_FAIL" || error.id === "UPDATE_FAIL") {
         let errors = [];
         error.msg.messages.forEach(el => {
           errors.push(el.msg);
@@ -43,9 +54,13 @@ export class Register extends Component {
         this.setState({ msg: [] });
       }
     }
-    //when navbars' "settings" clicked => state.settings is true
-    if (isAuthenticated && (this.props.location.state===undefined || !this.props.location.state.settings)) {
-      this.props.history.push("/");
+    if (responseMsg !== prevProps.responseMsg) {
+      if (
+        responseMsg === "UPDATE_SUCCESS" ||
+        responseMsg === "REGISTER_SUCCESS"
+      ) {
+        this.props.history.push("/");
+      }
     }
   }
   render() {
@@ -53,7 +68,11 @@ export class Register extends Component {
       <div>
         <Grid container justify="center" alignItems="center">
           <Grid item md={6} xs={10}>
-            <h2>{ (this.props.location.state && this.props.location.state.settings) ? 'Update your profile:' : 'Create your profile:'  }</h2>
+            <h2>
+              {this.props.location.state && this.props.location.state.settings
+                ? "Update your profile:"
+                : "Create your profile:"}
+            </h2>
             <Box borderColor="primary.main" borderRadius={16} p={4} border={1}>
               <form>
                 {this.state.msg.map(e => (
@@ -101,7 +120,7 @@ export class Register extends Component {
                     margin="normal"
                     onClick={this.onSubmit}
                   >
-                   { (this.props.location.state && this.props.location.state.settings) ? 'Update' : 'Register'  }
+                    {this.state.isSettings ? "Update" : "Register"}
                   </Button>
                 </Grid>
               </form>
@@ -114,11 +133,17 @@ export class Register extends Component {
 }
 Register.propTypes = {
   error: PropTypes.object.isRequired,
-  register: PropTypes.func.isRequired
+  register: PropTypes.func.isRequired,
+  update: PropTypes.func.isRequired,
+  resetResponseMsg: PropTypes.func.isRequired
 };
 const mapStateToProps = state => ({
   error: state.error,
   isAuthenticated: state.auth.isAuthenticated,
-  user: state.auth.user
+  requestMsg: state.auth.requestMsg,
+  user: state.auth.user,
+  responseMsg: state.auth.responseMsg
 });
-export default connect(mapStateToProps, { register })(Register);
+export default connect(mapStateToProps, { register, update, resetResponseMsg })(
+  Register
+);
