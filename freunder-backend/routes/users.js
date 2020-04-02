@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 // Load User model
 const User = require("../models/User");
 
@@ -33,7 +34,7 @@ router.get("/:id", (req, res) => {
   });
 });
 
-// get User with id
+// update User with id
 router.put("/:id", (req, res) => {
   const { name, email, password, password2 } = req.body;
   let errors = [];
@@ -81,12 +82,23 @@ router.put("/:id", (req, res) => {
               user: updatedUser
             });
           }
-        }).then(mama => {
-          res.status(200).send({
-            success: "true",
-            message: "User updated successfully",
-            user: updatedUser
-          });
+        }).then(user => {
+          jwt.sign(
+            {
+              exp: Math.floor(Date.now() / 1000) + 60 * 60,
+              user: user
+            },
+            "secretkey",
+            (err, token) => {
+              res.status(200).send({
+                success: "true",
+                message: "User retrieved successfully",
+                user: updatedUser,
+                token: token
+              });
+              return;
+            }
+          );
         });
       });
     });
