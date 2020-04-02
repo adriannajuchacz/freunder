@@ -1,13 +1,22 @@
 import React, { Component } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
-import events from "../../events";
 import moment from "moment";
 import Grid from "@material-ui/core/Grid";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
 const localizer = momentLocalizer(moment);
-export default class EventCalendar extends Component {
+class EventCalendar extends Component {
+  formatEventDates(events) {
+    events.forEach(event => {
+      event.start = new Date(event.start);
+      event.end = new Date(event.end);
+    });
+    return events;
+  }
   render() {
+    let events = this.formatEventDates(this.props.event.events);
     return (
       <Grid container justify="center" alignItems="center">
         <Grid item md={8} xs={10}>
@@ -16,7 +25,7 @@ export default class EventCalendar extends Component {
               culture="en-GB"
               events={events}
               views={["month"]}
-              defaultDate={new Date(2018, 3, 1)}
+              defaultDate={new Date()}
               localizer={localizer}
             />
           </div>
@@ -25,3 +34,11 @@ export default class EventCalendar extends Component {
     );
   }
 }
+EventCalendar.propTypes = {
+  event: PropTypes.object.isRequired
+};
+const mapStateToProps = state => ({
+  event: state.event
+});
+
+export default connect(mapStateToProps, {})(EventCalendar);
