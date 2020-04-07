@@ -6,7 +6,7 @@ import LanguageIcon from "@material-ui/icons/Language";
 import ScheduleIcon from "@material-ui/icons/Schedule";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import { Link } from "react-router-dom";
+import history from "../../history";
 
 class Event extends Component {
   dateToString(date) {
@@ -16,6 +16,9 @@ class Event extends Component {
     let str = d.toLocaleDateString("de-DE") + " " + h + ":" + m;
     return str;
   }
+  handleChange = () => {
+    history.push("/newEvent", { update: true, event: this.props.event });
+  };
   render() {
     return (
       <div>
@@ -69,16 +72,25 @@ class Event extends Component {
                 </Grid>
                 <Grid item>
                   <Grid container justify="flex-end">
-                    <Link to="/newEvent" style={{ textDecoration: "none", marginRight: "7px" }}>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        size="large"
-                        margin="normal"
-                      >
-                        change event
-                      </Button>
-                    </Link>
+                    <Button
+                      onClick={this.handleChange}
+                      variant="contained"
+                      color="primary"
+                      size="large"
+                      margin="normal"
+                      style={{ textDecoration: "none", marginRight: "7px" }}
+                    >
+                      change event
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="large"
+                      margin="normal"
+                      style={{ marginRight: "7px" }}
+                    >
+                      delete
+                    </Button>
                     <Button
                       variant="contained"
                       color="primary"

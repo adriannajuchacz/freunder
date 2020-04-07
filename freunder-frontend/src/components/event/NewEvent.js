@@ -14,16 +14,21 @@ import Alert from "@material-ui/lab/Alert";
 class NewEvent extends Component {
   constructor(props) {
     super(props);
+    let updateEvent = props.location.state.event
+      ? props.location.state.event
+      : null;
     this.state = {
-      title: "",
-      location: "",
-      description: "",
-      imgLink: "",
-      link: "",
-      start: moment(),
-      end: moment(),
+      title: updateEvent ? updateEvent.title : "",
+      location: updateEvent ? updateEvent.location : "",
+      description: updateEvent ? updateEvent.description : "",
+      imgLink: updateEvent ? updateEvent.imgLink : "",
+      link: updateEvent ? updateEvent.link : "",
+      start: updateEvent ? updateEvent.start : moment(),
+      end: updateEvent ? updateEvent.end : moment(),
       msg: [],
-      user: JSON.parse(localStorage.getItem("user"))
+      user: JSON.parse(localStorage.getItem("user")),
+      isUpdate:
+        props.location.state !== undefined && props.location.state.update
     };
   }
   onChange = e => {
@@ -69,7 +74,7 @@ class NewEvent extends Component {
       }
     }
     const { error } = this.props;
-        if (error !== prevProps.error) {
+    if (error !== prevProps.error) {
       if (error.id === "ADD_EVENT_FAIL") {
         let errors = [];
         error.msg.messages.forEach(el => {
@@ -141,8 +146,6 @@ class NewEvent extends Component {
                     name="start"
                     variant="dialog"
                     ampm={false}
-                    onError={console.log}
-                    disablePast
                     format="YYYY/MM/DD HH:mm"
                   />
                   <br />
@@ -153,8 +156,6 @@ class NewEvent extends Component {
                     name="end"
                     variant="dialog"
                     ampm={false}
-                    onError={console.log}
-                    disablePast
                     format="YYYY/MM/DD HH:mm"
                   />
                   <br />
@@ -167,7 +168,7 @@ class NewEvent extends Component {
                     margin="normal"
                     onClick={this.onSubmit}
                   >
-                    Add
+                    {this.state.isUpdate ? "Update" : "Add"}
                   </Button>
                 </Grid>
               </form>
