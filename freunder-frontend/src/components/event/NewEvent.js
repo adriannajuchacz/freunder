@@ -6,7 +6,7 @@ import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import { KeyboardDateTimePicker } from "@material-ui/pickers";
-import { addEvent } from "../../actions/eventActions";
+import { addEvent, updateEvent } from "../../actions/eventActions";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Alert from "@material-ui/lab/Alert";
@@ -23,8 +23,8 @@ class NewEvent extends Component {
       description: updateEvent ? updateEvent.description : "",
       imgLink: updateEvent ? updateEvent.imgLink : "",
       link: updateEvent ? updateEvent.link : "",
-      start: updateEvent ? updateEvent.start : moment(),
-      end: updateEvent ? updateEvent.end : moment(),
+      start: updateEvent ? moment(updateEvent.start) : moment(),
+      end: updateEvent ? moment(updateEvent.end) : moment(),
       msg: [],
       user: JSON.parse(localStorage.getItem("user")),
       isUpdate:
@@ -62,9 +62,12 @@ class NewEvent extends Component {
       start,
       end
     };
-
     const user_id = user._id;
-    this.props.addEvent({ ...userData, user_id });
+    if (this.state.isUpdate) {
+      this.props.updateEvent({ ...userData, user_id });
+    } else {
+      this.props.addEvent({ ...userData, user_id });
+    }
   };
   componentDidUpdate(prevProps) {
     const { responseMsg } = this.props;
@@ -182,10 +185,11 @@ class NewEvent extends Component {
 
 NewEvent.propTypes = {
   error: PropTypes.object.isRequired,
-  addEvent: PropTypes.func.isRequired
+  addEvent: PropTypes.func.isRequired,
+  updateEvent: PropTypes.func.isRequired,
 };
 const mapStateToProps = state => ({
   error: state.error,
   responseMsg: state.event.responseMsg
 });
-export default connect(mapStateToProps, { addEvent })(NewEvent);
+export default connect(mapStateToProps, { addEvent, updateEvent })(NewEvent);
