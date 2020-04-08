@@ -5,28 +5,45 @@ const Event = require("../models/Event");
 
 // Gets All Events
 router.get("/", (req, res) => {
-  Event.find({}).then(events => {
+  Event.find({}).then((events) => {
     res.status(200).send({
       success: "true",
       message: "events retrieved successfully",
-      events: events
+      events: events,
     });
   });
 });
 
 // get event with id
 router.get("/:id", (req, res) => {
-  Event.findOne({ _id: req.params.id }).then(event => {
+  Event.findOne({ _id: req.params.id }).then((event) => {
     if (!event) {
       res.status(404).send({
         success: "false",
-        message: "No event found"
+        message: "No event found",
       });
     } else {
       res.status(200).send({
         success: "true",
         message: "Event retrieved successfully",
-        event: event
+        event: event,
+      });
+    }
+  });
+});
+
+// delete event with id
+router.delete("/:id", (req, res) => {
+  Event.deleteOne({ _id: req.params.id }).then((event) => {
+    if (!event) {
+      res.status(404).send({
+        success: "false",
+        message: "No event found",
+      });
+    } else {
+      res.status(200).send({
+        success: "true",
+        message: "User deleted successfully"
       });
     }
   });
@@ -42,14 +59,14 @@ router.post("/", (req, res) => {
     link,
     start,
     end,
-    user_id
+    user_id,
   } = req.body;
   let errors = [];
   //TODO: validation
   if (!title || !location || !description || !imgLink || !link || !user_id) {
     errors.push({ msg: "Please enter all fields" });
   }
-  User.findOne({ _id: user_id }).then(user => {
+  User.findOne({ _id: user_id }).then((user) => {
     if (!user) {
       errors.push({ msg: "User not found" });
     }
@@ -68,7 +85,7 @@ router.post("/", (req, res) => {
       res.status(400).send({
         success: "false",
         messages: errors,
-        event_create_data: req.body
+        event_create_data: req.body,
       });
       return;
     }
@@ -79,71 +96,105 @@ router.post("/", (req, res) => {
       imgLink,
       link,
       start,
-      end
+      end,
     });
     // SAVE USER
     user.createdEvents.push(newEvent);
-    user.save().catch(err => console.log(err));
+    user.save().catch((err) => console.log(err));
     // SAVE EVENT
     newEvent.creator = user;
     newEvent
       .save()
-      .then(event => {
+      .then((event) => {
         res.status(200).send({
           success: "true",
           message: "Event created successfully",
-          event: event
+          event: event,
         });
       })
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   });
 });
 
 // update event
 router.put("/:id", (req, res) => {
-  let { title, link, location, date, user_id } = req.body;
+  let {
+    title,
+    location,
+    description,
+    imgLink,
+    link,
+    start,
+    end,
+    user_id,
+  } = req.body;
   let errors = [];
   //TODO: validation
-  if (!title || !link || !location || !user_id) {
+  if (!title || !location || !description || !imgLink || !link || !user_id) {
     errors.push({ msg: "Please enter all fields" });
   }
-  Event.findOne({ _id: req.params.id }).then(event => {
+  Event.findOne({ _id: req.params.id }).then((event) => {
     if (!event) {
       res.status(404).send({
         success: "false",
-        message: "No event found"
+        message: "No event found",
       });
     }
-    if (!date) {
-      date = Date.now();
+    if (!start) {
+      start = Date.now();
     } else {
-      date = Date.parse(date);
+      start = Date.parse(start);
+    }
+    if (!end) {
+      end = Date.now();
+    } else {
+      end = Date.parse(end);
     }
     if (errors.length > 0) {
       res.status(400).send({
         success: "false",
         messages: errors,
-        event_create_data: req.body
+        event_create_data: req.body,
       });
       return;
     }
-    event = new Event({
+    const updatedEvent = new Event({
       title,
-      link,
       location,
-      date
+      description,
+      imgLink,
+      link,
+      start,
+      end,
     });
-    // SAVE EVENT
-    event
-      .save()
-      .then(event => {
+    const updatedData = {
+      $set: {
+        title: updatedEvent.title,
+        location: updatedEvent.location,
+        description: updatedEvent.description,
+        imgLink: updatedEvent.imgLink,
+        link: updatedEvent.link,
+        start: updatedEvent.start,
+        end: updatedEvent.end,
+      },
+    };
+    Event.updateOne({ _id: req.params.id }, updatedData, (err) => {
+      if (err) {
+        res.status(403).send({
+          success: "false",
+          message: "Event not updated",
+          event: updatedEvent,
+        });
+      }
+    })
+      .then((event) => {
         res.status(200).send({
           success: "true",
           message: "Event updated successfully",
-          event: event
+          event: updatedEvent,
         });
       })
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   });
 });
 module.exports = router;
