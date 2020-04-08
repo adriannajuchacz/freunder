@@ -6,7 +6,7 @@ import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import { KeyboardDateTimePicker } from "@material-ui/pickers";
-import { addEvent, updateEvent } from "../../actions/eventActions";
+import { addEvent, updateEvent, resetResponseMsg } from "../../actions/eventActions";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Alert from "@material-ui/lab/Alert";
@@ -28,7 +28,8 @@ class NewEvent extends Component {
       msg: [],
       user: JSON.parse(localStorage.getItem("user")),
       isUpdate:
-        props.location.state !== undefined && props.location.state.update
+        props.location.state !== undefined && props.location.state.update,
+      event_id: updateEvent._id
     };
   }
   onChange = e => {
@@ -63,22 +64,31 @@ class NewEvent extends Component {
       end
     };
     const user_id = user._id;
+    const event_id = this.state.event_id;
     if (this.state.isUpdate) {
-      this.props.updateEvent({ ...userData, user_id });
+      console.log("TRYING TO UPDATE");
+      this.props.updateEvent({ ...userData, user_id, event_id });
     } else {
       this.props.addEvent({ ...userData, user_id });
     }
   };
+  componentDidMount() {
+    this.props.resetResponseMsg();
+  }
   componentDidUpdate(prevProps) {
     const { responseMsg } = this.props;
+    const { error } = this.props;
+    debugger;
     if (responseMsg !== prevProps.responseMsg) {
-      if (responseMsg === "ADD_EVENT_SUCCESS") {
+      if (
+        responseMsg === "ADD_EVENT_SUCCESS" ||
+        responseMsg === "UPDATE_EVENT_SUCCESS"
+      ) {
         this.props.history.push("/");
       }
     }
-    const { error } = this.props;
     if (error !== prevProps.error) {
-      if (error.id === "ADD_EVENT_FAIL") {
+      if (error.id === "ADD_EVENT_FAIL" || error.id === "UPDATE_EVENT_FAIL") {
         let errors = [];
         error.msg.messages.forEach(el => {
           errors.push(el.msg);
@@ -187,9 +197,10 @@ NewEvent.propTypes = {
   error: PropTypes.object.isRequired,
   addEvent: PropTypes.func.isRequired,
   updateEvent: PropTypes.func.isRequired,
+  resetResponseMsg: PropTypes.func.isRequired
 };
 const mapStateToProps = state => ({
   error: state.error,
   responseMsg: state.event.responseMsg
 });
-export default connect(mapStateToProps, { addEvent, updateEvent })(NewEvent);
+export default connect(mapStateToProps, { addEvent, updateEvent, resetResponseMsg })(NewEvent);

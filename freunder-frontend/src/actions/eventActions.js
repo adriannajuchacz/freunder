@@ -4,7 +4,8 @@ import {
   ADD_EVENT_SUCCESS,
   ADD_EVENT_FAIL,
   UPDATE_EVENT_SUCCESS,
-  UPDATE_EVENT_FAIL
+  UPDATE_EVENT_FAIL,
+  RESET_EVENT_RESPONSE_MSG
 } from "./types";
 import store from "../store";
 import { axiosInstance } from "../axiosInstance";
@@ -74,7 +75,8 @@ export const updateEvent = ({
   link,
   start,
   end,
-  user_id
+  user_id,
+  event_id
 }) => dispatch => {
   // Request body
   const body = JSON.stringify({
@@ -88,7 +90,7 @@ export const updateEvent = ({
     user_id
   });
   axiosInstance
-    .put("/events", body)
+    .put("/events/" + event_id, body)
     .then(res =>
       dispatch({
         type: UPDATE_EVENT_SUCCESS,
@@ -107,4 +109,9 @@ export const updateEvent = ({
         type: UPDATE_EVENT_FAIL
       });
     });
+};
+export const resetResponseMsg = () => dispatch => {
+  dispatch({
+    type: RESET_EVENT_RESPONSE_MSG
+  });
 };
