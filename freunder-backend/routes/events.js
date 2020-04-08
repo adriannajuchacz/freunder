@@ -101,10 +101,10 @@ router.post("/", (req, res) => {
 
 // update event
 router.put("/:id", (req, res) => {
-  let { name, link, location, date, user_id } = req.body;
+  let { title, link, location, date, user_id } = req.body;
   let errors = [];
   //TODO: validation
-  if (!name || !link || !location || !user_id) {
+  if (!title || !link || !location || !user_id) {
     errors.push({ msg: "Please enter all fields" });
   }
   Event.findOne({ _id: req.params.id }).then(event => {
@@ -114,13 +114,6 @@ router.put("/:id", (req, res) => {
         message: "No event found"
       });
     }
-    let { name, link, location, date } = req.body;
-    let errors = [];
-    //TODO: validation
-    if (!name || !link || !location) {
-      errors.push({ msg: "Please enter all fields" });
-    }
-
     if (!date) {
       date = Date.now();
     } else {
@@ -135,7 +128,7 @@ router.put("/:id", (req, res) => {
       return;
     }
     event = new Event({
-      name,
+      title,
       link,
       location,
       date
